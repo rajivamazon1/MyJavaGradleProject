@@ -6,10 +6,6 @@
  * user guide available at https://docs.gradle.org/4.8.1/userguide/java_library_plugin.html
  */
 
-plugins {
-    // Apply the java-library plugin to add support for Java Library
-    id 'java-library'
-}
 buildscript {
 
 	repositories {
@@ -19,47 +15,40 @@ buildscript {
 	}
 	dependencies {
 	
-		classpath(group: 'org.jfrog.buildinfo', name:'build-info-extractor-gradle, version: '4.0.0')
+		classpath(group: 'org.jfrog.buildinfo', name:'build-info-extractor-gradle', version: '4.0.0')
 	
 	}
 
 }
 
-version = currentVersion
+//version = currentVersion
+
 
 apply plugin: 'com.jfrog.artifactory'
 apply plugin: 'java'
 apply plugin: 'maven-publish'
 
 dependencies {
-    // This dependency is exported to consumers, that is to say found on their compile classpath.
-    api 'org.apache.commons:commons-math3:3.6.1'
 
-    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-    implementation 'com.google.guava:guava:23.0'
-
-    // Use JUnit test framework
-    testImplementation 'junit:junit:4.12'
     
-    testCompile 'junit:junit:4.12' 
+    testImplementation  'junit:junit:4.12' 
 }
 
 publishing {
 	publications {
 		mavenJava(MavenPublication){
-			from components.Java
+			from components.java
 		}
 	}
 }
 artifactory {
-	contextUrl = 'https://localhost:8081/artifactory'
-	{
+	contextUrl = 'http://18.222.168.83:8081/artifactory'
+	
 	publish {
 	
 		repository {
 			repoKey = 'libs-snapshot-local'
-			username ="${artifactory_user}"
-			password ="${artifactory_password}"
+
 		}
 		defaults {
 			publications('mavenJava')
@@ -76,5 +65,4 @@ artifactory {
 
 wrapper {
 	gradleVersion = '4.5'
-
 }
